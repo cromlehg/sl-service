@@ -1,0 +1,24 @@
+@(account: Account)(implicit flash: Flash, messages: Messages, ac: controllers.AppContext, req: play.api.mvc.RequestHeader)
+
+@admin.common.contentMainPage(MenuState("app.admin.sidebar.account"), messages("app.admin.sidebar.account")) { } {
+
+	@admin.common.cardInRowSingleColumn(messages("app.admin.sidebar.account")) {
+
+		<ul class="list-group list-group-unbordered mb-3">
+			<li class="list-group-item">
+				<b>login</b> <a class="float-right">@account.login</a>
+			</li>
+			<li class="list-group-item">
+				<b>email</b> <a class="float-right">@account.email</a>
+			</li>
+			<li class="list-group-item">
+				<b>Зарегистрирован</b> <a class="float-right">@account.createdPrettyTime</a>
+			</li>
+			<li class="list-group-item">
+				<b>Статус</b> <a class="float-right">Активный</a>
+			</li>
+		</ul>
+
+	}
+
+} { }
