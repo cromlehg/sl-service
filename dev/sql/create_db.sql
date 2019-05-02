@@ -1,4 +1,4 @@
-CREATE DATABASE ds13 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-CREATE USER 'ds13'@'localhost' IDENTIFIED BY 'ds13';
-GRANT ALL PRIVILEGES ON ds13.* TO 'ds13'@'localhost';
+CREATE DATABASE simplelottery DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER 'simplelottery'@'localhost' IDENTIFIED BY 'simplelottery';
+GRANT ALL PRIVILEGES ON simplelottery.* TO 'simplelottery'@'localhost';
 FLUSH PRIVILEGES;

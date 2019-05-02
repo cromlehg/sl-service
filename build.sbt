@@ -27,7 +27,7 @@ val akkaVersion = "2.5.18"
 libraryDependencies ++= Seq(
   guice,
   ws,
-  "org.web3j" % "core" % "3.3.1",
+  "org.web3j" % "core" % "3.5.0",
   "com.github.t3hnar" %% "scala-bcrypt" % "3.1",
   "org.webjars.bower" % "jquery" % "3.3.1",
   "org.webjars" % "bootstrap" % "4.1.0",

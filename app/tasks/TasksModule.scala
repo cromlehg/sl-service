@@ -2,4 +2,7 @@ package tasks
 
 import play.api.inject.{SimpleModule, bind}
 
-class TasksModule extends SimpleModule(bind[BaseActorTask].toSelf.eagerly())
+class TasksModule extends SimpleModule(
+	bind[BaseActorTask].toSelf.eagerly(),
+	bind[FetchEventsTask].toSelf.eagerly()
+)

@@ -33,6 +33,16 @@ class Module(environment: Environment,
 		bind(classOf[DAOProvider]).to(classOf[SlickDAOProvider])
 
 		bind(classOf[Mailer]).to(classOf[MailGunMailer])
+
+		bind(classOf[EthTxDAO]).to(classOf[SlickEthTxDAO])
+		bind(classOf[EthTxDAOCloseHook]).asEagerSingleton()
+
+		bind(classOf[RewardDAO]).to(classOf[SlickRewardDAO])
+		bind(classOf[RewardDAOCloseHook]).asEagerSingleton()
+
+		bind(classOf[StakeDAO]).to(classOf[SlickStakeDAO])
+		bind(classOf[StakeDAOCloseHook]).asEagerSingleton()
+
 	}
 
 }

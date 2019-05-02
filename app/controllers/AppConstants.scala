@@ -1,5 +1,7 @@
 package controllers
 
+import java.math.{BigInteger, BigDecimal}
+
 object AppConstants {
 
   val APP_NAME = "sl-service"
@@ -27,5 +29,21 @@ object AppConstants {
 	val HTTP_USER_AGENT = "User-Agent"
 
 	val CHAT_MSGS_LIMIT = 5
+
+	val ETH_CAPACITY = "1000000000000000000"
+
+	val ETH_CAPACITY_BI = new BigInteger(ETH_CAPACITY)
+
+	val ETH_CAPACITY_BD = new BigDecimal(ETH_CAPACITY)
+
+	val ETH_ADDR_REGEXP = """0x[a-fA-F0-9]{40}"""
+
+	val ETH_PRIVATE_KEY_REGEXP = """[a-fA-F0-9]{64}"""
+
+	val ETH_VALUE_REGEXP = """(\d{0,18}\.\d{0,18})|(\d{0,18})"""
+
+	val ETH_GAS_LIMIT = "300000"
+
+	val ETH_GAS_PRICE = "7000000000"
 
 }
