@@ -3,7 +3,8 @@ package controllers
 import be.objectify.deadbolt.scala.DeadboltActions
 import javax.inject.{Inject, Singleton}
 import controllers.AuthRequestToAppContext.ac
-import models.dao.{DAOProvider, RewardDAO, StakeDAO}
+import models.Options
+import models.dao.{DAOProvider, OptionDAO, RewardDAO, StakeDAO}
 import play.api.Configuration
 import play.api.i18n.I18nSupport
 import play.api.mvc.{AbstractController, ControllerComponents}
@@ -15,6 +16,7 @@ class AppController @Inject()(
 	deadbolt: DeadboltActions,
 	cc: ControllerComponents,
 	config: Configuration,
+	optionDAO: OptionDAO,
 	rewardDAO: RewardDAO,
 	stakeDAO: StakeDAO
 )(implicit ec: ExecutionContext, dap: DAOProvider)
@@ -25,10 +27,22 @@ class AppController @Inject()(
 
 	def index = deadbolt.WithAuthRequest()() { implicit request =>
 		for {
+			lotteryAddress <- optionDAO.getOptionByName(Options.ETH_CONTRACT_ADDRESS).map(_.map(_.value))
 			stakes <- stakeDAO.listPage(AppConstants.DEFAULT_PAGE_SIZE, 1, Seq.empty, None)
 			rewards <- rewardDAO.listPage(AppConstants.DEFAULT_PAGE_SIZE, 1, Seq.empty, None)
-		} yield Ok(views.html.app.index(stakes, rewards))
+		} yield Ok(views.html.app.index(lotteryAddress, stakes, rewards))
+	}
 
+	def latestRewards = deadbolt.WithAuthRequest()() { implicit request =>
+		rewardDAO.listPage(AppConstants.DEFAULT_PAGE_SIZE, 1, Seq.empty, None) map { rewards =>
+			Ok(views.html.app.common.latestRewards(rewards))
+		}
+	}
+
+	def latestStakes = deadbolt.WithAuthRequest()() { implicit request =>
+		stakeDAO.listPage(AppConstants.DEFAULT_PAGE_SIZE, 1, Seq.empty, None) map { stakes =>
+			Ok(views.html.app.common.latestStakes(stakes))
+		}
 	}
 
 	def panel = deadbolt.SubjectPresent()() { implicit request =>

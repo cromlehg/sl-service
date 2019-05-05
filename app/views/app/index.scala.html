@@ -1,4 +1,4 @@
-@(stakes: Seq[models.Stake], rewards: Seq[models.Reward])(implicit flash: Flash, messages: Messages, ac: controllers.AppContext, req: play.api.mvc.RequestHeader)
+@(lotteryAddress: Option[String], stakes: Seq[models.Stake], rewards: Seq[models.Reward])(implicit flash: Flash, messages: Messages, ac: controllers.AppContext, req: play.api.mvc.RequestHeader)
 
 @app.common.main("index") { } {
   @base.common.components.container() {
@@ -6,15 +6,16 @@
 
 		<div class="row">
 			<div class="col">
-				Для того чтобы принять участие, отправьте на этот адрес не менее 0.1 ETH:<br>
+				Для того чтобы принять участие, отправьте на этот адрес не менее 0.1 ETH: <br>
+				@app.common.ethAddr(lotteryAddress.getOrElse(""))
 			</div>
 		</div>
 		<div class="mb-4"></div>
 		<div class="row">
-			<div class="col-lg-6">
+			<div class="col-lg-6" data-bind="latest-stakes">
 				@app.common.latestStakes(stakes)
 			</div>
-			<div class="col-lg-6">
+			<div class="col-lg-6" data-bind="latest-rewards">
 				@app.common.latestRewards(rewards)
 			</div>
 		</div>
@@ -23,8 +24,21 @@
   }
 } {
 	<script>
-		setInterval(function() {
-			window.location.reload();
-		}, 10000);
+		var updateRewards = function() {
+			return $.get('@routes.AppController.latestRewards').done(function(data) {
+				$('[data-bind="latest-rewards]').html(data)
+			});
+		};
+		var updateStakes = function() {
+			return $.get('@routes.AppController.latestStakes()').done(function(data) {
+				$('[data-bind="latest-stakes]').html(data)
+			});
+		};
+		var tick = function() {
+			Promise.all([updateRewards(), updateStakes()]).then(function() {
+				setTimeout(tick, 2000);
+			})
+		};
+		tick();
 	</script>
 }

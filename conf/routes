@@ -108,6 +108,10 @@ GET         /app/recoverpassword/:login/:code                               cont
 +nocsrf
 POST        /app/recoverpassword                                            controllers.AccountsController.processRecoverPassword
 
+GET         /app/rewards/latest                                             controllers.AppController.latestRewards
+
+GET         /app/stakes/latest                                             controllers.AppController.latestStakes
+
 GET         /app/media/*file                                                controllers.MediaController.media(file)
 
 # Map static resources from the /public folder to the /assets URL path
