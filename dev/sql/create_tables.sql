@@ -63,3 +63,62 @@ CREATE TABLE options (
   `type`                    VARCHAR(100) NOT NULL,
   `value`                   TEXT NOT NULL
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE eth_txs (
+	id                        SERIAL PRIMARY KEY,
+	action_type               ENUM('create', 'finish', 'reward', 'unknown', 'update') NOT NULL,
+	block_number              BIGINT UNSIGNED,
+	contract_address          CHAR(42),
+	error                     TEXT,
+	`from`                    CHAR(42) NOT NULL,
+	gas_limit                 VARCHAR(255),
+	gas_price                 VARCHAR(255),
+	gas_used                  VARCHAR(255),
+	hash                      CHAR(66),
+	invoker_id                BIGINT UNSIGNED,
+	nonce                     VARCHAR(255),
+	registered                BIGINT UNSIGNED NOT NULL,
+	receipt_status            ENUM('fail', 'success', 'unknown') NOT NULL,
+	status                    ENUM('fail', 'mined', 'pending', 'unknown') NOT NULL,
+	target_id                 BIGINT UNSIGNED,
+	`to`                      CHAR(42),
+	transaction_index         VARCHAR(255),
+	`value`                   VARCHAR(255) NOT NULL
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE invokers (
+	id                        SERIAL PRIMARY KEY,
+	owner_id                  BIGINT UNSIGNED NOT NULL,
+	address                   CHAR(42) UNIQUE NOT NULL,
+	private_key               CHAR(64) UNIQUE NOT NULL,
+	registered                BIGINT UNSIGNED NOT NULL
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE rewards (
+	id                        SERIAL PRIMARY KEY,
+	amount                    VARCHAR(255) NOT NULL,
+	lottery_address           VARCHAR(42) NOT NULL,
+	lottery_index             BIGINT UNSIGNED NOT NULL,
+	owner_address             VARCHAR(42) NOT NULL,
+	owner_id                  BIGINT UNSIGNED,
+	registered                BIGINT UNSIGNED NOT NULL,
+	room_id                   BIGINT UNSIGNED NOT NULL,
+	ticket_number             BIGINT UNSIGNED NOT NULL,
+	tx_hash                   CHAR(66)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE stakes (
+	id                        SERIAL PRIMARY KEY,
+	lottery_address           VARCHAR(42) NOT NULL,
+	lottery_index             BIGINT UNSIGNED,
+	net_amount                VARCHAR(255),
+	owner_address             VARCHAR(42) NOT NULL,
+	owner_id                  BIGINT UNSIGNED,
+	registered                BIGINT UNSIGNED NOT NULL,
+	room_id                   BIGINT UNSIGNED NOT NULL,
+	status                    ENUM('accepted', 'created', 'rejected'),
+	ticket_number             BIGINT UNSIGNED NOT NULL,
+	ticket_price              VARCHAR(255) NOT NULL,
+	timestamp                 BIGINT UNSIGNED,
+	tx_hash                   CHAR(66)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;

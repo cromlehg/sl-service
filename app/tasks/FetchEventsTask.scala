@@ -43,7 +43,7 @@ class FetchEventsTask @Inject()(
 							val eventsInfo = events.flatten.map(e => (e.log.getTransactionHash, e.log.getLogIndex.toString))
 							Logger.debug(s"${events.size} events found: $eventsInfo")
 							util.serializeFutures(events) {
-								case Some(event: TicketPurchasedEvent) => processTicketPurchase(event)
+								case Some(event: TicketPurchasedEvent) => processTicketPurchase(event, address)
 								case _ => future(false)
 							} flatMap { processedEvents =>
 								Logger.debug(s"Contract checked. ${processedEvents.count(e => e)} new events processed.")
@@ -65,9 +65,9 @@ class FetchEventsTask @Inject()(
 	// helper functions
 	// -------------------------------------------------------------------------------------------------------------------
 
-	def processTicketPurchase(event: TicketPurchasedEvent): Future[Boolean] =
+	def processTicketPurchase(event: TicketPurchasedEvent, address: String): Future[Boolean] =
 		stakeDAO.create(
-			event.lotAddr,
+			address,
 			Some(event.lotIndex.toLong),
 			None,
 			event.player,

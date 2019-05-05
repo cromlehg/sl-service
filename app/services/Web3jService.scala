@@ -38,7 +38,6 @@ case class Event(sign: EventSignature, log: Log, timestamp: Long) {
 }
 
 class TicketPurchasedEvent(override val log: Log, timestamp: Long) extends Event(TicketPurchasedEventSignature, log, timestamp) {
-  val lotAddr = fields("lotAddr")
   val lotIndex = fields("lotIndex")
   val ticketNumber = fields("ticketNumber")
   val player = fields("player")
@@ -48,7 +47,6 @@ class TicketPurchasedEvent(override val log: Log, timestamp: Long) extends Event
 object TicketPurchasedEventSignature extends EventSignature(
   "TicketPurchased",
   Seq(
-    ("lotAddr", "address", false),
     ("lotIndex", "uint256", false),
     ("ticketNumber", "uint256", false),
     ("player", "address", false),
