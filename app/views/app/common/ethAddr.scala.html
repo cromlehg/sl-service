@@ -1,0 +1,4 @@
+@(addr: String, size: Int = -1)(implicit flash: Flash, messages: Messages, ac: controllers.AppContext, req: play.api.mvc.RequestHeader)
+
+<a href="https://etherscan.io/address/@addr" target="blank">@if(size == -1){ @addr } else { @addr.substring(0, size)... }</a>
+
