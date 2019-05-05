@@ -44,6 +44,13 @@ class TicketPurchasedEvent(override val log: Log, timestamp: Long) extends Event
   val ticketPrice = fields("ticketPrice")
 }
 
+class TicketWonEvent(override val log: Log, timestamp: Long) extends Event(TicketWonEventSignature, log, timestamp) {
+	val lotIndex = fields("lotIndex")
+	val ticketNumber = fields("ticketNumber")
+	val player = fields("player")
+	val amount = fields("win")
+}
+
 object TicketPurchasedEventSignature extends EventSignature(
   "TicketPurchased",
   Seq(
@@ -52,6 +59,16 @@ object TicketPurchasedEventSignature extends EventSignature(
     ("player", "address", false),
     ("ticketPrice", "uint256", false)
   )
+)
+
+object TicketWonEventSignature extends EventSignature(
+	"TicketWon",
+	Seq(
+		("lotIndex", "uint256", false),
+		("ticketNumber", "uint256", false),
+		("player", "address", false),
+		("win", "uint256", false)
+	)
 )
 
 case class TxExecutionResult (
@@ -202,6 +219,7 @@ class Web3jService @Inject() (optionDAO: OptionDAO)(implicit executionContext: E
       val timestamp = getBlockTimestamp(log.getBlockNumber.longValue)
       log.getTopics.get(0) match {
         case TicketPurchasedEventSignature.sign => Some(new TicketPurchasedEvent(log, timestamp))
+				case TicketWonEventSignature.sign => Some(new TicketWonEvent(log, timestamp))
         case _ => None
       }
     }

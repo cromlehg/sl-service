@@ -44,10 +44,13 @@ class FetchEventsTask @Inject()(
 							Logger.debug(s"${events.size} events found: $eventsInfo")
 							util.serializeFutures(events) {
 								case Some(event: TicketPurchasedEvent) => processTicketPurchase(event, address)
+								case Some(event: TicketWonEvent) => processTicketWon(event, address)
 								case _ => future(false)
 							} flatMap { processedEvents =>
-								Logger.debug(s"Contract checked. ${processedEvents.count(e => e)} new events processed.")
-								future(true)
+								optionDAO.updateOptionByName(Options.ETH_CHECKED_BLOCK_NUM, toBlock.toString) map { _ =>
+									Logger.debug(s"Contract checked. ${processedEvents.count(e => e)} new events processed.")
+									true
+								}
 							}
 						}
 					}
@@ -77,6 +80,18 @@ class FetchEventsTask @Inject()(
 			event.ticketNumber.toLong,
 			event.ticketPrice,
 			Some(event.timestamp),
+			Some(event.log.getTransactionHash),
+		) map { _ => true }
+
+	def processTicketWon(event: TicketWonEvent, address: String): Future[Boolean] =
+		rewardDAO.create(
+			event.amount,
+			address,
+			event.lotIndex.toLong,
+			event.player,
+			None,
+			1,
+			event.ticketNumber.toLong,
 			Some(event.log.getTransactionHash),
 		) map { _ => true }
 

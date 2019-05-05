@@ -1,4 +1,4 @@
-@(rewards: List[models.Reward])(implicit flash: Flash, messages: Messages, ac: controllers.AppContext, req: play.api.mvc.RequestHeader)
+@(rewards: Seq[models.Reward])(implicit flash: Flash, messages: Messages, ac: controllers.AppContext, req: play.api.mvc.RequestHeader)
 
 <table class="table">
 	<thead>
@@ -10,7 +10,7 @@
 	<tbody>
 		@for(reward <- rewards) {
 			<tr>
-				<th>@app.common.ethAddr(reward.address)</th>
+				<th>@app.common.ethAddr(reward.ownerAddress)</th>
 				<td>@reward.amount</td>
 			</tr>
 		}
